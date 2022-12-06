@@ -3,6 +3,8 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 let db = require("./model/db");
+const  org_routes = require("./controller/signup");
+const log_routes = require("./controller/login");
 require("dotenv").config();
 const port = process?.env?.port || 3000;
 
@@ -26,7 +28,7 @@ db.sequelize
         }" database ${env?.DBNAME || "NA"}`
       );
     }
-    db.sequelize.sync();
+    // db.sequelize.sync({force: true});
   })
   .catch((err) => {
     console.error(
@@ -38,6 +40,10 @@ db.sequelize
 app.get("/", (req, res) => {
   res.send("welcome to express server");
 });
+
+
+app.use("/organization", org_routes);
+app.use("/organisation", log_routes);
 
 app.listen(port, (err) => {
   if (!err) {
