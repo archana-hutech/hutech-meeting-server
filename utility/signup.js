@@ -87,4 +87,6 @@ async function crtEmp(empData) {
   }
 }
 
+
+
 module.exports = {createOrg, crtEmp, crtPermisson };

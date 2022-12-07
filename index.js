@@ -3,8 +3,9 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 let db = require("./model/db");
-const  org_routes = require("./controller/signup");
+const  signup_routes = require("./controller/signup");
 const log_routes = require("./controller/login");
+const employee_routes = require("./controller/employee")
 require("dotenv").config();
 const port = process?.env?.port || 3000;
 
@@ -28,7 +29,7 @@ db.sequelize
         }" database ${env?.DBNAME || "NA"}`
       );
     }
-    // db.sequelize.sync({force: true});
+    //  db.sequelize.sync({force: true});
   })
   .catch((err) => {
     console.error(
@@ -42,8 +43,10 @@ app.get("/", (req, res) => {
 });
 
 
-app.use("/organization", org_routes);
+app.use("/organization", signup_routes);
 app.use("/organisation", log_routes);
+app.use("/org", employee_routes);
+
 
 app.listen(port, (err) => {
   if (!err) {

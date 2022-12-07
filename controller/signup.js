@@ -1,6 +1,6 @@
 const express = require("express");
 const route = express.Router();
-const {createOrg, crtEmp, crtPermisson} = require('../utility/signup')
+const {createOrg, crtEmp, crtPermisson } = require('../utility/signup')
 
 //post 
 route.post("/signup", async (req, res) => {
@@ -9,7 +9,7 @@ route.post("/signup", async (req, res) => {
     if(orgData && empData){
          const crtOrg = await createOrg(orgData);
          if(crtOrg?.success){
-            const permissionCrt = await crtPermisson({orgId:crtOrg?.orgs.id, name:"Admin", permissions:{all:true} });
+            const permissionCrt = await crtPermisson({orgId:crtOrg?.orgs.id, name:"Admin", permissions:{All:true} });
              if(permissionCrt?.success){
                const empCrt = await crtEmp({orgId:crtOrg?.orgs?.id, permissionId:permissionCrt?.access?.id,...empData});
                if(empCrt?.success){
@@ -35,5 +35,7 @@ route.post("/signup", async (req, res) => {
     });
   }
 });
+
+
 
 module.exports = route;

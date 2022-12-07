@@ -1,4 +1,5 @@
 const Sequelize = require("sequelize");
+const meeting = require("../model/meeting");
 require("dotenv").config();
 
 const sequelize = new Sequelize(
@@ -46,7 +47,21 @@ db.Permission.hasMany(db.Employees, {
       foreignKey: 'permissionId',
       targetKey: 'id'
 });
+db.Employees.belongsTo(db.Permission)
 
+db.Organizations.hasMany(db.Meeting, {
+     foreignKey: 'orgId',
+     targetKey: 'id'
+});
 
+db.Employees.hasMany(db.Meeting, {
+  foreignKey: 'hostId',
+  targetKey: 'id'
+});
+
+db.Employees.hasMany(db.Addresses, {
+    foreignKey: 'employeeId',
+    targetKey: 'id'
+});
 
 module.exports = db;

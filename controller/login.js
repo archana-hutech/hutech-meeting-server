@@ -1,6 +1,7 @@
 const express = require("express");
 const route = express.Router();
 const { loginUtility } = require('../utility/login')
+const { authorizeUser } = require('../utility/auth');
 
 route.post("/login", async (req, res) => {
   try {
@@ -15,6 +16,8 @@ route.post("/login", async (req, res) => {
       error: error.message,
     });
   }
-});;
+});
+
+
 
 module.exports = route;
