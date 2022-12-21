@@ -5,11 +5,15 @@ const cors = require("cors");
 let db = require("./model/db");
 const  signup_routes = require("./controller/signup");
 const log_routes = require("./controller/login");
-const employee_routes = require("./controller/employee")
+const permission_routes = require("./controller/permission");
+const employee_routes = require("./controller/employee");
+const media_routes = require("./controller/media");
+let fileupload = require('express-fileupload');
 require("dotenv").config();
 const port = process?.env?.port || 3000;
 
 app.use(cors());
+app.use(fileupload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ limit: "2mb", extended: true }));
 
@@ -29,7 +33,7 @@ db.sequelize
         }" database ${env?.DBNAME || "NA"}`
       );
     }
-    //  db.sequelize.sync({force: true});
+      // db.sequelize.sync({force: true});
   })
   .catch((err) => {
     console.error(
@@ -44,8 +48,10 @@ app.get("/", (req, res) => {
 
 
 app.use("/organization", signup_routes);
-app.use("/organisation", log_routes);
-app.use("/org", employee_routes);
+app.use("/org/api/v1", log_routes);
+app.use("/org/api/v2", employee_routes);
+app.use("/org/api/v3", permission_routes);
+app.use("/org/api/v4", media_routes);
 
 
 app.listen(port, (err) => {

@@ -1,5 +1,6 @@
 const db = require('../model/db');
 const emp = db.Employees;
+const assent = db.Permission;
 
 async function addEmployee(users) {
   try {
@@ -56,10 +57,6 @@ async function getEmployee(id = null) {
       error: error.message,
     };
   }
-}
-
-async function accessGenerate(){
-  
 }
 
 

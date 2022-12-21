@@ -30,7 +30,8 @@ const db = {
   Addresses: require('../model/address')(sequelize, Sequelize),
   Employees: require('../model/employee')(sequelize, Sequelize),
   Permission: require('../model/permission')(sequelize, Sequelize),
-  Meeting: require('../model/meeting')(sequelize, Sequelize)
+  Meeting: require('../model/meeting')(sequelize, Sequelize),
+  Media: require('../model/media')(sequelize,Sequelize)
 };
 
 db.Organizations.hasMany(db.Employees, {
