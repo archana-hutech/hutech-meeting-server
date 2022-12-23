@@ -49,6 +49,7 @@ async function authorizeUser(req, res, next) {
           break;
         case '/permission':
           if(Method==='POST'){
+            console.log("ooooooooo");
             if(permissionsInfo?.all || permissionsInfo?.EMP_CRT)
             hasPermissions=true
           }

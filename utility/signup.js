@@ -87,6 +87,57 @@ async function crtEmp(empData) {
   }
 }
 
+async function getOrgData(id = null) {
+  try {
+    const getOrganisationDetails = await org.findAll({ where: id ? { id } : {} });
+    if(getOrganisationDetails.length > 0 ){
+      return {
+         sucess: true,
+         statusCode: 200,
+         message: "organisation details",
+         getOrg:id ? getOrganisationDetails[0] : getOrganisationDetails,
+      }
+    } else {
+      return {
+          sucess: true,
+          statusCode: 500,
+          message: " organisation details not found",
+         }
+    }
+  } catch (error) {
+     console.log(error);
+        return({ sucess:false, statusCode: 500, message:"organisation not found", error: error.message });
+  }
+}
+
+async function updateOrg(id, orgData) {
+ try {
+  const updatedOrganization = await db.Organizations.update(orgData?.orgData,  { where: { id }, returning:true});
+  if(updatedOrganization[0]>0){
+ return {
+      success: true,
+      statusCode: 200,
+      oganization: updatedOrganization[1],
+    };
+  }else{
+ return {
+      success: true,
+      statusCode: 404,
+       message: "organisation not found",
+      //  oganization: updatedOrganization,
+    };
+  }
+  
+ } catch (error) {
+  console.log(error);
+    return {
+      success: false,
+      statusCode: 500,
+      message: "internal server error",
+      error: error.message,
+    };
+ }
+}
 
 
-module.exports = {createOrg, crtEmp, crtPermisson };
+module.exports = {createOrg, crtEmp, crtPermisson, getOrgData, updateOrg };

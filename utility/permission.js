@@ -6,6 +6,7 @@ const assent = db.Permission;
 //create role
 async function accessRole(user){
    try {
+    console.log(user);
     const accessInfo = await assent.create(user);
     console.log(user);
     if (user) {

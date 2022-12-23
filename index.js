@@ -33,7 +33,7 @@ db.sequelize
         }" database ${env?.DBNAME || "NA"}`
       );
     }
-      // db.sequelize.sync({force: true});
+      //  db.sequelize.sync({force: true});
   })
   .catch((err) => {
     console.error(
@@ -47,11 +47,11 @@ app.get("/", (req, res) => {
 });
 
 
-app.use("/organization", signup_routes);
-app.use("/org/api/v1", log_routes);
-app.use("/org/api/v2", employee_routes);
-app.use("/org/api/v3", permission_routes);
-app.use("/org/api/v4", media_routes);
+app.use("/api/v1/org", signup_routes);
+app.use("/api/v1/org", log_routes);
+app.use("/api/v1", employee_routes);
+app.use("/api/v1", permission_routes);
+app.use("/api/v1/media", media_routes);
 
 
 app.listen(port, (err) => {

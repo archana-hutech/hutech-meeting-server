@@ -46,7 +46,6 @@ route.get("/permission", authorizeUser, async(req, res) =>{
  route.put("/permission/:id", authorizeUser, async (req, res) => {
    try {
        const assentDisplay = await updatePermission(req?.params.id, {...{...req?.body, orgId:req?.user?.orgId }});
-       console.log(assentDisplay);
         res.status(assentDisplay?.statusCode).json(assentDisplay);
    } catch (error) {
       console.log(error);
