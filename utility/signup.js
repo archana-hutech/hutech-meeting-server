@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const db = require('../model/db');
 const org = db.Organizations;
 const emp = db.Employees;
@@ -16,7 +17,7 @@ async function createOrg(orgData) {
     } else {
       return {
         success: false,
-        statusCode: 500,
+        statusCode: 400,
         message: "failed to register user",
       };
     }
@@ -44,7 +45,7 @@ async function crtPermisson(permissionData) {
     } else {
       return {
         success: false,
-        statusCode: 500,
+        statusCode: 400,
         message: "failed to register access",
       };
     }
@@ -72,7 +73,7 @@ async function crtEmp(empData) {
     } else {
       return {
         success: false,
-        statusCode: 500,
+        statusCode: 400,
         message: "failed to register emp",
       };
     }
@@ -87,26 +88,33 @@ async function crtEmp(empData) {
   }
 }
 
-async function getOrgData(id = null) {
+async function getOrgData(offset, limit, q, id = null) {
   try {
-    const getOrganisationDetails = await org.findAll({ where: id ? { id } : {} });
-    if(getOrganisationDetails.length > 0 ){
+    const getOrganisationDetails = await org.findAndCountAll({ where: id ? { id } : { [Op.or]:[{name : {
+      [Op.iLike]:`%${q}%`, 
+    }}, {city : {
+      [Op.iLike]:`%${q}%`, 
+    }}, {state : {
+      [Op.iLike]: `%${q}%`
+    }}] }, offset, limit,});
+    if(getOrganisationDetails.count > 0 ){
       return {
          sucess: true,
          statusCode: 200,
          message: "organisation details",
-         getOrg:id ? getOrganisationDetails[0] : getOrganisationDetails,
+         totalCount: getOrganisationDetails?.count,
+         org: getOrganisationDetails?.rows,
       }
     } else {
       return {
           sucess: true,
-          statusCode: 500,
+          statusCode: 400,
           message: " organisation details not found",
          }
     }
   } catch (error) {
      console.log(error);
-        return({ sucess:false, statusCode: 500, message:"organisation not found", error: error.message });
+        return({ sucess:false, statusCode: 500, message:"Internal server error", error: error.message });
   }
 }
 
@@ -139,5 +147,23 @@ async function updateOrg(id, orgData) {
  }
 }
 
+async function deleteOrganisation(id) {
+  try {
+    const delteOrg = await org.destroy({ where: { id } });
+    return {
+      success: true,
+      statusCode: 200,
+      message: "org deleted successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      statusCode: 500,
+      message: "internal server error",
+      error: error.message,
+    };
+  }
+}
 
-module.exports = {createOrg, crtEmp, crtPermisson, getOrgData, updateOrg };
+
+module.exports = {createOrg, crtEmp, crtPermisson, getOrgData, updateOrg, deleteOrganisation };

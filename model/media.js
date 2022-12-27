@@ -18,6 +18,7 @@ module.exports = (sequelize, Sequelize)  => {
             fileType: DataTypes.STRING,
             fileExtension: DataTypes.STRING,
             fileData: DataTypes.BLOB,
+            fileSize: DataTypes.INTEGER,
             fileString: DataTypes.TEXT,
             fileLink: { type: DataTypes.STRING, allowNull: true}
         },

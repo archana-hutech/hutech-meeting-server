@@ -1,6 +1,6 @@
 const express = require("express");
 const route = express.Router();
-const { createOrg, crtEmp, crtPermisson, getOrgData, updateOrg } = require('../utility/signup')
+const { createOrg, crtEmp, crtPermisson, getOrgData, updateOrg, deleteOrganisation } = require('../utility/signup')
 
 // create-org 
 route.post("/signup", async (req, res) => {
@@ -39,27 +39,19 @@ route.post("/signup", async (req, res) => {
 //getAllOrganisation
 route.get("/", async (req, res) =>{
   try {
-    const organisationData = await getOrgData();
+    const { offset, limit, q } = req.query;
+    const organisationData = await getOrgData(offset, limit, q);
     res.status(organisationData?.statusCode).json(organisationData);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ sucess: false, message: "internal server error", error: error.message});
   }
 })
 
-// const filters = req.query;
-//   const filteredUsers = data.filter(user => {
-//     let isValid = true;
-//     for (key in filters) {
-//       console.log(key, user[key], filters[key]);
-//       isValid = isValid && user[key] == filters[key];
-//     }
-//     return isValid;
-//   });
-
 //getById
 route.get("/:id", async (req, res) => {
    try {
-    let OrganisationDetails = await getOrgData(req?.params?.id);
+    let OrganisationDetails = await getOrgData(0, 1, req?.params?.id);
     res.status(OrganisationDetails?.statusCode).json(OrganisationDetails);
    } catch (error) {
      res.status(500).json({
@@ -82,7 +74,13 @@ route.put("/:id", async (req, res) => {
 })
 
 route.delete("/:id", async (req, res) => {
-  
+  try {
+    const removeOrg = await deleteOrganisation(req?.params?.id);
+    res.status(removeOrg?.statusCode).json(removeOrg);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ sucess: false, message: "internal server error", error: error.message});
+  }
 })
 
 module.exports = route;

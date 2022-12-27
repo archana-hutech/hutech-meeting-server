@@ -16,7 +16,7 @@ async function addEmployee(users) {
     } else {
       return {
         success: false,
-        statusCode: 500,
+        statusCode: 400,
         message: "failed to register user",
       };
     }
@@ -52,7 +52,7 @@ async function getEmployee(id = null) {
   } catch (error) {
     return {
       success: false,
-      statusCode: 404,
+      statusCode: 500,
       message: "user not found",
       error: error.message,
     };

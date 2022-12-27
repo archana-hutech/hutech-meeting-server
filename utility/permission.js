@@ -4,22 +4,20 @@ const assent = db.Permission;
 
 
 //create role
-async function accessRole(user){
+async function accessRole(role){
    try {
-    console.log(user);
-    const accessInfo = await assent.create(user);
-    console.log(user);
-    if (user) {
+    const accessInfo = await assent.create(role);
+    if (accessInfo) {
       return {
         success: true,
         statusCode: 200,
         message: "role created successfully",
-        user: accessInfo.get(),
+        roles: accessInfo.get(),
       };
     } else {
       return {
         success: false,
-        statusCode: 500,
+        statusCode: 400,
         message: "failed to create role for user",
       };
     }
@@ -49,22 +47,22 @@ async function getPermission(id = null) {
      }else{
          return {
              sucess: true,
-             statusCode:500,
+             statusCode:400,
              message:"permissions not found",
          }
      };
     } catch (error) {
      console.log(error);
-        return({ sucess:false, statusCode: 400, message:"users not found", error: error.message });
+        return({ sucess:false, statusCode: 500, message:"users not found", error: error.message });
      }
      }
 
 // update permission
-async function updatePermission(id, user){
+async function updatePermission(id, role){
   try {
-        const updatePermissionInfo = await assent.update(user, {where:{id}});
+        const updatePermissionInfo = await assent.update(role, {where:{id}});
         console.log(updatePermissionInfo);
-        if (permission) {
+        if (updatePermissionInfo) {
            return {
                     sucess: true,
                     statusCode:200,
@@ -73,19 +71,33 @@ async function updatePermission(id, user){
         }else {
           return{
                 sucess: false,
-                statusCode:500,
+                statusCode:400,
                 message:"failed to update the permission",
             }
         }
   } catch (error) {
      console.log(error);
-                return({ sucess:false, statusCode: 400, message:"permission not updated", error: error.message });
+                return({ sucess:false, statusCode: 500, message:"permission not found", error: error.message });
              }
 }
 
 //delete permissioin
 async function removePermission(id){
-
+  try {
+     const delteAssent = await assent.destroy({ where: { id } });
+      return {
+      success: true,
+      statusCode: 200,
+      message: "assent deleted successfully",
+    };
+  } catch (error) {
+     return {
+      success: false,
+      statusCode: 500,
+      message: "internal server error",
+      error: error.message,
+    };
+  }
 }
 
 module.exports = { accessRole, getPermission, updatePermission, removePermission };

@@ -2,7 +2,8 @@ const db = require('../model/db');
 const jwt = require("jsonwebtoken");
 
 async function createJWTToken(id, email, permission) {
-  //get the matched user details
+  try {
+    //get the matched user details
   //create JWT token which includes id & email
   const token = jwt.sign(
     { user: { id, email, permission } },
@@ -11,6 +12,10 @@ async function createJWTToken(id, email, permission) {
   );
   // console.log(token);
   return { idToken: token, refreshToken: "na" };
+  } catch (error) {
+     console.log(error);
+     res.sendStatus(500); 
+  }
 }
 
 
@@ -30,40 +35,39 @@ async function authorizeUser(req, res, next) {
       console.log(err);
       res.sendStatus(401);
      } else {
+      console.log(user?.user?.permission?.permissions);
       const permissionsInfo=user?.user?.permission?.permissions;
       let hasPermissions=false;
       switch (Endpoint) {
         case '/employee':
           if(Method==='POST'){
-            if(permissionsInfo?.all || permissionsInfo?.EMP_CRT)
+            if(permissionsInfo?.All || permissionsInfo?.EMP_CRT)
             hasPermissions=true
           }
             else if(Method==='PUT'){
-            if(permissionsInfo?.all || permissionsInfo?.EMP_CRT)
+            if(permissionsInfo?.All || permissionsInfo?.EMP_CRT)
             hasPermissions=true
           }
             else if(Method==='DELETE'){
-            if(permissionsInfo?.all || permissionsInfo?.EMP_CRT)
+            if(permissionsInfo?.All || permissionsInfo?.EMP_CRT)
             hasPermissions=true
           }
           break;
         case '/permission':
           if(Method==='POST'){
-            console.log("ooooooooo");
-            if(permissionsInfo?.all || permissionsInfo?.EMP_CRT)
+            if(permissionsInfo?.All || permissionsInfo?.EMP_CRT)
             hasPermissions=true
           }
            else if(Method==='GET'){
-              console.log("kkkkkk");
-              if(permissionsInfo?.all || permissionsInfo?.EMP_CRT )
+              if(permissionsInfo?.All || permissionsInfo?.EMP_CRT )
               hasPermissions=true
            }
             else if(Method==='PUT'){
-            if(permissionsInfo?.all || permissionsInfo?.EMP_CRT)
+            if(permissionsInfo?.All || permissionsInfo?.EMP_CRT)
             hasPermissions=true
           }
             else if(Method==='DELETE'){
-            if(permissionsInfo?.all || permissionsInfo?.EMP_CRT)
+            if(permissionsInfo?.All || permissionsInfo?.EMP_CRT)
             hasPermissions=true
           }
           break;

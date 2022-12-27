@@ -33,7 +33,6 @@ route.get("/permission/:id", authorizeUser, async(req, res) =>{
 route.get("/permission", authorizeUser, async(req, res) =>{
   try {
     const accessDetails = await getPermission();
-     //  console.log(permissiondetails);
         res.status(accessDetails?.statusCode).json(accessDetails);  
   } 
     catch (error) {
